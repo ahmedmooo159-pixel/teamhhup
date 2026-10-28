@@ -684,3 +684,122 @@ body.show-cursor { cursor: default; }
   color: #fff;
   font-weight: 700;
 }
+
+
+/* ============================================================
+   Questions & QR Code Page (#p-questions)
+   ============================================================ */
+.q-deco {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.q-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 34px;
+  z-index: 2;
+  padding: 40px 80px;
+}
+
+.q-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.q-header .hl {
+  font-size: 84px;
+  color: var(--logo-white);
+  margin-bottom: 0;
+  letter-spacing: -0.02em;
+}
+
+.q-sub {
+  font: 500 28px/1.4 var(--font-body);
+  color: var(--ice);
+  letter-spacing: 0.3px;
+  max-width: 850px;
+  text-align: center;
+}
+
+.q-card {
+  background: rgba(244, 247, 252, .06);
+  border: 1px solid rgba(175, 199, 234, .25);
+  border-radius: 36px;
+  padding: 36px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .6), 0 0 40px rgba(175, 199, 234, .12);
+  transform: translate3d(0, 30px, 0);
+  opacity: 0;
+  transition: transform .8s var(--ease-out), opacity .8s var(--ease-out);
+}
+
+.q-card.on {
+  transform: none;
+  opacity: 1;
+}
+
+.q-qr-box {
+  width: 280px;
+  height: 280px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, .5);
+}
+
+.q-qr-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.q-meta {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.q-badge {
+  font: 600 18px/1 var(--font-head);
+  color: var(--ice);
+  padding: 9px 20px;
+  border-radius: 999px;
+  background: rgba(175, 199, 234, .12);
+  border: 1px solid rgba(175, 199, 234, .25);
+}
+
+.q-link {
+  font: 600 20px/1 var(--font-head);
+  color: var(--logo-white);
+  text-decoration: none;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--blue), var(--primary));
+  border: 1px solid rgba(175, 199, 234, .35);
+  box-shadow: 0 10px 24px -8px rgba(66, 105, 168, .5);
+  transition: transform .2s var(--ease-out), box-shadow .2s;
+  cursor: pointer;
+}
+
+.q-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -6px rgba(66, 105, 168, .7);
+}

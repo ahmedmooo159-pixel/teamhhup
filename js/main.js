@@ -545,52 +545,6 @@
       el('h4', '', card, f.title);
       el('p', '', card, f.text);
     });
-    bridge(P, d.bridge);
-  };
-
-  /* ---- 12 · Architecture and Security ---- */
-  R.s12 = function (P, d) {
-    var c = P.content;
-    var col = el('div', 'col wide', c);
-    col.appendChild(headline(d.headline, 0, null, true));
-    /* layer stack */
-    var stack = el('div', 'arch-stack', c);
-    d.layers.forEach(function (l, i) {
-      var row = rvEl('div', 'arch-layer', stack, null, 0, null, i + 1);
-      el('strong', '', row, l.name);
-      el('span', '', row, l.desc);
-    });
-    /* permissions table */
-    var tbl = el('div', 'arch-perms', c);
-    rvEl('div', 'arch-perms-head', tbl, 'Permission Model', 1, null, 0);
-    d.permissions.forEach(function (p, i) {
-      var row = rvEl('div', 'arch-perm-row', tbl, null, 1, null, i + 1);
-      el('span', 'perm-role', row, p.role);
-      el('span', 'perm-can', row, p.can);
-    });
-    bridge(P, d.bridge);
-  };
-
-  /* ---- 13 · Future Roadmap ---- */
-  R.s13 = function (P, d) {
-    var c = P.content;
-    var col = el('div', 'col wide', c);
-    col.appendChild(headline(d.headline, 0, null, true));
-    rvEl('span', 'status-pill', col, d.status, 0, null, 4);
-    var tl = el('div', 'tl', c);
-    rvEl('div', 'tl-line', tl, null, 0, null, 0);
-    var names = { done: 'Done', progress: 'In progress', next: 'Next' };
-    d.milestones.forEach(function (m, i) {
-      var x = 190 + i * 200;
-      var ms = rvEl('div', 'ms ' + m.status, tl, null, 0, null, i + 2);
-      ms.style.left = x + 'px';
-      var dot = el('div', 'dot', ms);
-      dot.style.setProperty('--cx', (1520 - x) + 'px'); dot.style.setProperty('--cy', (540 - 520) + 'px');
-      el('div', 'lab', ms, m.label); el('div', 'st', ms, names[m.status]);
-    });
-    rvEl('div', 'tl-note', tl, d.milestonesNote, 0, null, 8);
-    var rm = el('div', 'roadmap', c);
-    d.roadmap.forEach(function (t, i) { rvEl('div', 'rcard', rm, t, 1, null, i + 1); });
     P.onStep = function (s) {
       P.content.classList.toggle('collapse-on', s >= 2);
       if (s >= 2) {
@@ -658,6 +612,41 @@
     };
   };
 
+  /* ---- closing logo page ---- */
+  R.endlogo = function (P) {
+    P.logo = buildLogo(P.content, true);
+    P.enter = function () { P.logo.play(); };
+    P.leave = function () { P.logo.final(); };
+  };
+
+  /* ---- questions & QR code page ---- */
+  R.questions = function (P) {
+    var c = P.content;
+    var deco = el('div', 'q-deco', c);
+    el('div', 'is-ring is-ring1', deco);
+    el('div', 'is-ring is-ring2', deco);
+
+    var container = el('div', 'q-container', c);
+
+    var header = el('div', 'q-header', container);
+    header.appendChild(headline(C.questionsTitle || 'Questions?', 0, null, false));
+    rvEl('p', 'q-sub', header, C.questionsSub || 'Scan the QR code to submit your questions & feedback', 0, null, 2);
+
+    var card = rvEl('div', 'q-card', container, null, 0, null, 3);
+    var qrBox = el('div', 'q-qr-box', card);
+    var qrImg = el('img', 'q-qr-img', qrBox);
+    qrImg.src = 'assets/qr-questions.png';
+    qrImg.alt = 'Scan QR Code';
+
+    var meta = el('div', 'q-meta', card);
+    el('span', 'q-badge', meta, 'Google Forms');
+    var linkBtn = el('a', 'q-link', meta, 'Open Form Directly \u2197');
+    linkBtn.href = C.questionsFormUrl;
+    linkBtn.target = '_blank';
+    linkBtn.rel = 'noopener noreferrer';
+    linkBtn.addEventListener('click', function (e) { e.stopPropagation(); });
+  };
+
   /* ---- closing coda ---- */
   R.coda = function (P) {
     var c = P.content;
@@ -671,7 +660,6 @@
     var txt = el('div', 'cd-text', c);
     var items = [];
     items.push(el('h2', 'rv', txt, C.coda.thanks));
-    items.push(el('h3', 'rv', txt, C.coda.questions));
     var sup = el('div', 'cd-sup rv', txt, C.university + ' \u00B7 ' + C.faculty);
     el('b', '', sup, C.supervisor);
     items.push(sup);
@@ -710,7 +698,7 @@
               unmute.classList.add('show');
             });
           } catch (e) { noVideo(); }
-        }, 900);
+        }, 500);
       }
     }
     unmute.addEventListener('click', function () { vid.muted = false; unmute.classList.remove('show'); unmute.blur(); });
@@ -725,7 +713,8 @@
     P.enter = function () {
       reset();
       var token = tk;
-      P.logo.play(function () { settle(token); });
+      P.logo.final();
+      setTimeout(function () { settle(token); }, 400);
     };
     P.leave = function () { reset(); };
   };
@@ -736,6 +725,8 @@
   C.sections.forEach(function (d, i) {
     addPage({ id: d.id, kind: d.id, n: d.steps.length, theme: d.theme, speaker: null, title: d.title, def: d, no: i + 1 });
   });
+  addPage({ id: 'endlogo', kind: 'endlogo', n: 1, theme: 'dark', speaker: null, title: 'TeamHub' });
+  addPage({ id: 'questions', kind: 'questions', n: 1, theme: 'dark', speaker: null, title: 'Questions' });
   addPage({ id: 'coda', kind: 'coda', n: 1, theme: 'dark', speaker: null, title: 'Thank you', cls: 'coda', closing: true });
   pages.forEach(function (P) {
     P.curStep = -1;
@@ -872,7 +863,7 @@
     if (changed) {
       tTimers.forEach(clearTimeout); tTimers = [];
       if (oldP && oldP.leave) oldP.leave(dir);
-      if (!(oldP && (oldP.id === 's10' || oldP.id === 's13'))) tsym.className = '';
+      if (!(oldP && (oldP.id === 's10' || oldP.id === 's11' || oldP.id === 'endlogo'))) tsym.className = '';
 
       // 04 <-> 05 share the same cards: keep them still across the hand-off
       var pair = { s04: 1, s05: 1 };

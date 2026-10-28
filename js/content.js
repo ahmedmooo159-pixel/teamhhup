@@ -35,6 +35,11 @@ window.CONTENT = {
   closingVideo: 'thank-you.mp4',
   closingVideoFolder: 'assets/vedios/',
 
+  /* Questions & Feedback QR Code */
+  questionsFormUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfTJe1ncFxvV1DwL9VvpM-9_hftAncdAEFjy91o7yiU35EK7w/viewform?usp=dialog',
+  questionsTitle: 'Questions?',
+  questionsSub: 'Scan the QR code to submit your questions & feedback',
+
   /* Team: member i presents section i (MEMBER_1 also opens + closes). */
   team: [
     { name: 'AHMED MOURAD', role: 'ROLE' },
@@ -98,9 +103,7 @@ window.CONTENT = {
     s08: ['analytics.png', 'supervisor.png'],
     s09: ['dashboard.png', 'mobile.png'],
     s10: ['dashboard.png'],
-    s11: ['dashboard.png'],
-    s12: ['roles.png'],
-    s13: ['mobile.png']
+    s11: ['dashboard.png']
   },
 
   /* ---------- The 10 sections ----------
@@ -366,8 +369,8 @@ window.CONTENT = {
       id: 's09', title: 'How it is built', theme: 'dark',
       headline: 'How it is *built.*',
       nodes: [
-        { id: 'web', title: 'React frontend', sub: 'The web app' },
-        { id: 'api', title: 'ASP.NET Core REST API', sub: 'Business rules + roles' },
+        { id: 'web', title: 'WEP APP', sub: 'The web app' },
+        { id: 'api', title: 'BACK-END', sub: 'Business rules + roles' },
         { id: 'db', title: 'Firebase / Firestore', sub: 'Data + real-time' }
       ],
       sidecars: ['Authentication', 'File storage'],
@@ -395,7 +398,7 @@ window.CONTENT = {
         { label: 'MILESTONE_5', status: 'next' }
       ],
       milestonesNote: 'PROGRESS PLACEHOLDERS',
-      roadmap: ['Flutter mobile app', 'Notifications and reminders', 'AI smart summaries of project progress'],
+      roadmap: ['mobile app', 'Notifications and reminders', 'AI smart summaries of project progress'],
       bridge: 'That is TeamHub. Back to where we started.',
       steps: [
         { phone: 'rightSmall', scene: [{ swap: 'dashboard.png' }, { clear: true }, { scroll: 0, ms: 600 }] },
@@ -412,74 +415,21 @@ window.CONTENT = {
         '**Intelligent Task Allocation:** AI recommends assignments based on past performance and current workload',
         '**Automated Executive Summaries:** Generates concise weekly progress reports for faculty supervisors',
         '**Early Risk Forecasting:** Analyzes velocity dips to alert teams to potential deadline slips',
-        '**Project Copilot:** Context-aware assistant answering queries about team progress and backlog status'
+        '**Project Copilot:** Context-aware assistant answering queries about team progress and backlog status',
+        '**AI Agent:** Agent can make a declaration for you'
       ],
       features: [
         { title: 'Smart Suggestions', text: '**Workload Balance:** Analyzes member bandwidth and ticket difficulty to recommend ideal assignees.' },
         { title: 'Auto Summaries', text: '**Executive Briefs:** Automatically compiles sprint activity into clear, readable supervisor updates.' },
         { title: 'Risk Detection', text: '**Bottleneck Alerts:** Flags unassigned tasks, review delays, and critical path blockers in advance.' }
       ],
-      bridge: 'All of this runs on a carefully designed architecture.',
+      bridge: 'That is TeamHub. Back to where we started.',
       steps: [
         { phone: 'rightSmall', scene: [{ swap: 'dashboard.png' }, { clear: true }, { scroll: 0, ms: 600 }] },
         {
           phone: 'rightSmall', scene: [{ swap: 'dashboard.png' }, { scroll: 40, ms: 1800 },
           { callout: 'AI analyses your project', at: [50, 55] }, { wait: 900 }, { clear: true }]
         },
-        { phone: 'rightSmall' }
-      ]
-    },
-
-    /* 12 ---------------------------------------------------------------- */
-    {
-      id: 's12', title: 'Architecture and Security', theme: 'dark',
-      headline: 'Secure by design. *Role-aware* by default.',
-      layers: [
-        { name: 'React 18 SPA Client', desc: '**Frontend:** Modular Components · State Management · Role-Aware Conditional Views' },
-        { name: 'ASP.NET Core REST API', desc: '**Business Logic:** JWT Authentication · RBAC Policy Middleware · Repository Pattern' },
-        { name: 'Firebase & Firestore', desc: '**Database & Storage:** Real-time WebSocket Listeners · Cloud Rules · Asset Buckets' }
-      ],
-      permissions: [
-        { role: 'Student', can: '**Contributor:** View personal tasks, upload file revisions, post comments, track own progress' },
-        { role: 'Leader', can: '**Project Manager:** Create/assign tasks, approve code reviews, define milestones, manage roster' },
-        { role: 'Supervisor', can: '**Faculty Evaluator:** Cross-team read-only audit, review contribution analytics, grade milestones' }
-      ],
-      bridge: 'With a solid foundation built, here is where we stand today.',
-      steps: [
-        { phone: 'rightSmall', scene: [{ swap: 'roles.png' }, { clear: true }, { scroll: 0, ms: 600 }] },
-        {
-          phone: 'focus', scene: [{ swap: 'roles.png' }, { wait: 400 },
-          { zoom: [50, 30, 1.4], ms: 1300 },
-          { callout: 'Role enforced at every layer', at: [50, 22] }, { wait: 1000 },
-          { clear: true }, { unzoom: true, ms: 1000 }]
-        },
-        { phone: 'rightSmall' }
-      ]
-    },
-
-    /* 13 ---------------------------------------------------------------- */
-    {
-      id: 's13', title: 'Current Status and Future Roadmap', theme: 'light',
-      headline: 'Where we are, and what is *coming.*',
-      status: 'Under active development',
-      milestones: [
-        { label: 'Core REST API & JWT Auth', status: 'done' },
-        { label: 'Kanban Workflow & File Engine', status: 'done' },
-        { label: 'Supervisor Health Dashboard', status: 'progress' },
-        { label: 'Flutter Mobile Application', status: 'next' },
-        { label: 'AI Assistant & Copilot Engine', status: 'next' }
-      ],
-      milestonesNote: 'Current project implementation status',
-      roadmap: [
-        '**Cross-Platform Mobile:** Native Flutter iOS & Android application reusing the ASP.NET REST API',
-        '**Smart Push Alerts:** Push notifications for approaching deadlines and new task assignments',
-        '**AI Digest Automation:** Weekly automated progress digests sent directly to academic supervisors',
-        '**University LMS Integration:** REST hooks for synchronizing teams with university academic portals'
-      ],
-      bridge: 'That is TeamHub.',
-      steps: [
-        { phone: 'rightSmall', scene: [{ swap: 'mobile.png' }, { clear: true }, { scroll: 0, ms: 600 }] },
-        { phone: 'rightSmall' },
         { phone: 'hidden' }
       ]
     }
