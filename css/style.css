@@ -440,3 +440,247 @@ body.show-cursor { cursor: default; }
   background: rgba(244,247,252,.09);
   border-color: rgba(175,199,234,.4);
 }
+
+/* ============================================================
+   Intro Stats page  (#istats)
+   ============================================================ */
+
+/* decorative rings */
+.is-deco { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.is-ring  { position: absolute; border-radius: 50%; border: 1px solid rgba(175,199,234,.13); }
+.is-ring1 { width: 900px;  height: 900px;  top: 50%; left: 50%; transform: translate(-50%,-50%); animation: isRing 8s linear infinite; }
+.is-ring2 { width: 1300px; height: 1300px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation: isRing 13s linear infinite reverse; }
+.is-ring3 { width: 600px;  height: 600px;  top: 50%; left: 50%; transform: translate(-50%,-50%); animation: isRing 5s linear infinite; }
+@keyframes isRing { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+/* headline column */
+.is-col {
+  position: absolute;
+  top: 110px; left: 0; right: 0;
+  text-align: center;
+  padding: 0 80px;
+}
+.is-col .hl { font-size: 68px; color: var(--logo-white); }
+
+/* cards row */
+.is-cards {
+  position: absolute;
+  top: 280px; left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  padding: 0 100px;
+}
+
+.is-card {
+  flex: 1;
+  max-width: 560px;
+  background: rgba(244,247,252,.06);
+  border: 1px solid rgba(175,199,234,.22);
+  border-radius: 32px;
+  padding: 52px 52px 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  transition: opacity .8s var(--ease-out), transform .9s var(--ease-out);
+  box-shadow: 0 30px 80px -30px rgba(10,21,48,.6);
+  position: relative;
+}
+.is-card.on {
+  opacity: 1;
+  transform: none;
+}
+.is-card:nth-child(2) { transition-delay: .22s; }
+
+/* arc wrapper — num-box centres inside it */
+.is-arc-wrap {
+  position: relative;
+  width: 200px; height: 200px;
+  flex-shrink: 0;
+}
+.is-arc {
+  width: 200px; height: 200px;
+  transform: rotate(-90deg);
+  display: block;
+}
+.is-arc-track {
+  fill: none;
+  stroke: rgba(175,199,234,.15);
+  stroke-width: 14;
+}
+.is-arc-fill {
+  fill: none;
+  stroke: var(--ice);
+  stroke-width: 14;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 10px rgba(175,199,234,.55));
+}
+
+/* number sits dead-center inside the arc wrapper */
+.is-num-box {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  pointer-events: none;
+}
+.is-num {
+  font: 700 62px/1 var(--font-head);
+  color: var(--logo-white);
+  letter-spacing: -2px;
+}
+.is-suf {
+  font: 700 36px/1 var(--font-head);
+  color: var(--ice);
+}
+
+.is-lbl {
+  font: 500 24px/1.5 var(--font-body);
+  color: rgba(244,247,252,.82);
+  text-align: center;
+  max-width: 420px;
+}
+.is-src {
+  font: 500 17px/1.4 var(--font-body);
+  color: rgba(175,199,234,.6);
+  text-align: center;
+  letter-spacing: .3px;
+}
+
+
+/* ============================================================
+   Section 11 · AI Assistant
+   ============================================================ */
+.ai-feats {
+  position: absolute;
+  left: 110px;
+  top: 480px;
+  display: flex;
+  gap: 28px;
+  width: 1180px;
+}
+.ai-card {
+  flex: 1;
+  background: rgba(244, 247, 252, .06);
+  border: 1px solid rgba(175, 199, 234, .22);
+  border-radius: 24px;
+  padding: 34px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 24px 50px -20px rgba(0, 0, 0, .5);
+}
+.ai-icon {
+  font-size: 46px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.ai-card h4 {
+  font: 700 28px var(--font-head);
+  color: var(--logo-white);
+}
+.ai-card p {
+  font: 500 21px/1.45 var(--font-body);
+  color: var(--ice);
+}
+
+/* ============================================================
+   Section 12 · Architecture & Security
+   ============================================================ */
+.arch-stack {
+  position: absolute;
+  left: 110px;
+  top: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 1180px;
+}
+.arch-layer {
+  padding: 22px 28px;
+  border-radius: 18px;
+  background: rgba(244, 247, 252, .06);
+  border: 1px solid rgba(175, 199, 234, .22);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 16px 36px -16px rgba(0, 0, 0, .4);
+}
+.arch-layer strong {
+  font: 700 26px var(--font-head);
+  color: var(--logo-white);
+}
+.arch-layer span {
+  font: 500 22px var(--font-body);
+  color: var(--ice);
+}
+
+.arch-perms {
+  position: absolute;
+  left: 110px;
+  top: 660px;
+  width: 1180px;
+}
+.arch-perms-head {
+  font: 700 26px var(--font-head);
+  color: var(--logo-white);
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+.arch-perm-row {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(175, 199, 234, .18);
+}
+.perm-role {
+  font: 700 22px var(--font-head);
+  color: var(--ice);
+  width: 170px;
+  flex-shrink: 0;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(175, 199, 234, .12);
+  border: 1px solid rgba(175, 199, 234, .24);
+  text-align: center;
+}
+.perm-can {
+  font: 500 22px var(--font-body);
+  color: var(--logo-white);
+}
+
+
+/* ============================================================
+   Keyword Tags for Speaker Memory Cue
+   ============================================================ */
+.kw-tag {
+  font-weight: 700;
+  color: var(--blue);
+  display: inline;
+}
+#stage[data-theme="dark"] .kw-tag {
+  color: var(--ice);
+  text-shadow: 0 0 16px rgba(175, 199, 234, .3);
+}
+.pts li .kw-tag {
+  color: var(--navy);
+  margin-right: 6px;
+}
+#stage[data-theme="dark"] .pts li .kw-tag {
+  color: #fff;
+  text-shadow: 0 0 12px rgba(175, 199, 234, .45);
+}
+.ccard .kw-tag, .ai-card .kw-tag {
+  color: #fff;
+  font-weight: 700;
+}

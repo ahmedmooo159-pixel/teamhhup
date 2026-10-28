@@ -29,7 +29,13 @@
     var e = document.createElement(tag);
     if (cls) e.className = cls;
     if (parent) parent.appendChild(e);
-    if (text !== undefined && text !== null) e.textContent = text;
+    if (text !== undefined && text !== null) {
+      if (typeof text === 'string' && text.indexOf('**') !== -1) {
+        e.innerHTML = text.replace(/\*\*(.+?)\*\*/g, '<strong class="kw-tag">$1</strong>');
+      } else {
+        e.textContent = text;
+      }
+    }
     return e;
   }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
@@ -527,6 +533,131 @@
     bridge(P, d.bridge);
   };
 
+  /* ---- 11 · AI Assistant ---- */
+  R.s11 = function (P, d) {
+    var c = P.content;
+    var col = el('div', 'col wide', c);
+    col.appendChild(headline(d.headline, 0, null, true));
+    pointsList(col, d.points, 0, 1);
+    var feats = el('div', 'ai-feats', c);
+    d.features.forEach(function (f, i) {
+      var card = rvEl('div', 'ai-card', feats, null, 1, null, i + 1);
+      el('h4', '', card, f.title);
+      el('p', '', card, f.text);
+    });
+    bridge(P, d.bridge);
+  };
+
+  /* ---- 12 · Architecture and Security ---- */
+  R.s12 = function (P, d) {
+    var c = P.content;
+    var col = el('div', 'col wide', c);
+    col.appendChild(headline(d.headline, 0, null, true));
+    /* layer stack */
+    var stack = el('div', 'arch-stack', c);
+    d.layers.forEach(function (l, i) {
+      var row = rvEl('div', 'arch-layer', stack, null, 0, null, i + 1);
+      el('strong', '', row, l.name);
+      el('span', '', row, l.desc);
+    });
+    /* permissions table */
+    var tbl = el('div', 'arch-perms', c);
+    rvEl('div', 'arch-perms-head', tbl, 'Permission Model', 1, null, 0);
+    d.permissions.forEach(function (p, i) {
+      var row = rvEl('div', 'arch-perm-row', tbl, null, 1, null, i + 1);
+      el('span', 'perm-role', row, p.role);
+      el('span', 'perm-can', row, p.can);
+    });
+    bridge(P, d.bridge);
+  };
+
+  /* ---- 13 · Future Roadmap ---- */
+  R.s13 = function (P, d) {
+    var c = P.content;
+    var col = el('div', 'col wide', c);
+    col.appendChild(headline(d.headline, 0, null, true));
+    rvEl('span', 'status-pill', col, d.status, 0, null, 4);
+    var tl = el('div', 'tl', c);
+    rvEl('div', 'tl-line', tl, null, 0, null, 0);
+    var names = { done: 'Done', progress: 'In progress', next: 'Next' };
+    d.milestones.forEach(function (m, i) {
+      var x = 190 + i * 200;
+      var ms = rvEl('div', 'ms ' + m.status, tl, null, 0, null, i + 2);
+      ms.style.left = x + 'px';
+      var dot = el('div', 'dot', ms);
+      dot.style.setProperty('--cx', (1520 - x) + 'px'); dot.style.setProperty('--cy', (540 - 520) + 'px');
+      el('div', 'lab', ms, m.label); el('div', 'st', ms, names[m.status]);
+    });
+    rvEl('div', 'tl-note', tl, d.milestonesNote, 0, null, 8);
+    var rm = el('div', 'roadmap', c);
+    d.roadmap.forEach(function (t, i) { rvEl('div', 'rcard', rm, t, 1, null, i + 1); });
+    P.onStep = function (s) {
+      P.content.classList.toggle('collapse-on', s >= 2);
+      if (s >= 2) {
+        clearTimeout(P._t); tsym.className = 'at-right';
+        P._t = setTimeout(function () { if (P.curStep >= 2) tsym.className = 'at-right show'; }, 700);
+      } else { clearTimeout(P._t); tsym.className = ''; }
+    };
+    P.leave = function () { clearTimeout(P._t); tsym.className = ''; };
+    bridge(P, d.bridge);
+  };
+
+  /* ---- intro stats page ---- */
+  R.istats = function (P) {
+    var d = C.introStats;
+    var c = P.content;
+    /* background rings decoration */
+    var deco = el('div', 'is-deco', c);
+    el('div', 'is-ring is-ring1', deco);
+    el('div', 'is-ring is-ring2', deco);
+    el('div', 'is-ring is-ring3', deco);
+    /* headline */
+    var col = el('div', 'is-col', c);
+    col.appendChild(headline(d.headline, 0, null, false));
+    /* stat cards */
+    var cards = el('div', 'is-cards', c);
+    var spins = [];
+    d.stats.forEach(function (s, i) {
+      var card = rvEl('div', 'is-card', cards, null, 0, null, i + 1);
+      /* arc ring progress */
+      var arcWrap = el('div', 'is-arc-wrap', card);
+      var svg = svgEl('svg', { 'class': 'is-arc', viewBox: '0 0 200 200' }, arcWrap);
+      svgEl('circle', { cx: 100, cy: 100, r: 84, 'class': 'is-arc-track' }, svg);
+      var fill = svgEl('circle', { cx: 100, cy: 100, r: 84, 'class': 'is-arc-fill',
+                                   pathLength: 100, 'stroke-dasharray': 100,
+                                   'stroke-dashoffset': 100 }, svg);
+      /* number — centred inside the arc wrapper */
+      var numBox = el('div', 'is-num-box', arcWrap);
+      var sp = el('span', 'is-num count', numBox, s.prefix + (0).toFixed(s.decimals));
+      sp.dataset.to = s.value; sp.dataset.decimals = s.decimals; sp.dataset.prefix = s.prefix;
+      el('span', 'is-suf', numBox, s.suffix);
+      /* label + source */
+      el('p', 'is-lbl', card, s.label);
+      el('small', 'is-src', card, s.source);
+      spins.push({ fill: fill, target: s.value });
+    });
+    /* trigger counters + arc on enter */
+    P.enter = function () {
+      spins.forEach(function (o, i) {
+        var delay = 400 + i * 260;
+        setTimeout(function () {
+          o.fill.style.transition = 'stroke-dashoffset 1.9s cubic-bezier(0.16,1,0.3,1)';
+          o.fill.style.strokeDashoffset = 100 - o.target;
+        }, delay);
+        var span = cards.querySelectorAll('.is-num')[i];
+        if (span) runCount(span, delay);
+      });
+    };
+    P.leave = function () {
+      spins.forEach(function (o) {
+        o.fill.style.transition = 'none';
+        o.fill.style.strokeDashoffset = 100;
+      });
+      var spans = cards.querySelectorAll('.is-num');
+      for (var k = 0; k < spans.length; k++) resetCount(spans[k]);
+    };
+  };
+
   /* ---- closing coda ---- */
   R.coda = function (P) {
     var c = P.content;
@@ -601,20 +732,14 @@
 
   /* ---------- build all pages ---------- */
   addPage({ id: 'logo', kind: 'logo', n: 1, theme: 'light', speaker: null, title: 'TeamHub' });
+  addPage({ id: 'istats', kind: 'istats', n: 1, theme: 'dark', speaker: null, title: 'By the numbers' });
   C.sections.forEach(function (d, i) {
-    addPage({ id: d.id, kind: d.id, n: d.steps.length, theme: d.theme, speaker: i, title: d.title, def: d, no: i + 1 });
+    addPage({ id: d.id, kind: d.id, n: d.steps.length, theme: d.theme, speaker: null, title: d.title, def: d, no: i + 1 });
   });
-  addPage({ id: 'coda', kind: 'coda', n: 1, theme: 'dark', speaker: 0, title: 'Thank you', cls: 'coda', closing: true });
+  addPage({ id: 'coda', kind: 'coda', n: 1, theme: 'dark', speaker: null, title: 'Thank you', cls: 'coda', closing: true });
   pages.forEach(function (P) {
     P.curStep = -1;
     R[P.kind](P, P.def);
-    /* inject presenter label for section pages */
-    if (P.def && C.sectionPresenters && C.sectionPresenters[P.no - 1]) {
-      var pLabel = el('div', 'presenter-label rv', P.el);
-      pLabel.dataset.from = 0;
-      el('span', 'presenter-icon', pLabel, '\uD83C\uDF99\uFE0F');
-      el('span', 'presenter-name', pLabel, C.sectionPresenters[P.no - 1]);
-    }
   });
 
   /* ======================================================================
@@ -698,7 +823,7 @@
   }
   function updateCue() {
     var n = pages[state.p + 1];
-    cueEl.textContent = n ? ('Next: ' + (n.speaker === null ? 'Team' : C.team[n.speaker].name) + ' \u00B7 ' + n.title) : 'End of presentation';
+    cueEl.textContent = n ? ('Next: ' + n.title) : 'End of presentation';
   }
 
   /* ---- dots (one per page, auto-hide) ---- */
@@ -747,7 +872,7 @@
     if (changed) {
       tTimers.forEach(clearTimeout); tTimers = [];
       if (oldP && oldP.leave) oldP.leave(dir);
-      if (!(oldP && oldP.id === 's10')) tsym.className = '';
+      if (!(oldP && (oldP.id === 's10' || oldP.id === 's13'))) tsym.className = '';
 
       // 04 <-> 05 share the same cards: keep them still across the hand-off
       var pair = { s04: 1, s05: 1 };
